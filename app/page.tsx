@@ -49,9 +49,9 @@ function CrosswordApp() {
 
   const handleNewPuzzle = () => {
     if (window.confirm("Apakah Anda yakin ingin memulai teka-teki baru? Progres Anda saat ini akan hilang.")) {
+      setShowCompletionModal(false)
       dispatch({ type: "NEW_PUZZLE" })
       dispatch({ type: "SET_VIEW_ONLY", payload: false })
-      setShowCompletionModal(false)
     }
   }
 
