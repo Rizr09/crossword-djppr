@@ -293,7 +293,7 @@ function crosswordReducer(state: CrosswordState, action: CrosswordAction): Cross
       )
 
       // Check if the puzzle is complete
-      const isComplete = newGrid.every((row) => row.every((cell) => cell.isBlank || cell.value !== ""))
+      const isComplete = newGrid.every((row) => row.every((cell) => cell.isBlank || cell.value === cell.solution))
 
       const newState = {
         ...state,
@@ -446,13 +446,17 @@ function crosswordReducer(state: CrosswordState, action: CrosswordAction): Cross
     }
 
     case "SET_VIEW_ONLY": {
-      const newState = {
+      // Clear highlights and active state when toggling view-only
+      const clearedGrid = state.grid.map(row =>
+        row.map(cell => ({ ...cell, isActive: false, isHighlighted: false }))
+      )
+      return {
         ...state,
+        grid: clearedGrid,
+        activeClueId: null,
+        activeCell: null,
         viewOnly: action.payload,
       }
-
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newState))
-      return newState
     }
 
     default:

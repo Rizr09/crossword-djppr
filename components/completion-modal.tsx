@@ -86,7 +86,7 @@ export function CompletionModal({ isOpen, onClose, onNewPuzzle, onViewOnly, stat
             onClick={onViewOnly}
             className="border-border bg-background text-foreground hover:bg-muted"
           >
-            Lanjutkan
+            Kembali
           </Button>
           <Button onClick={onNewPuzzle} className="bg-primary text-primary-foreground hover:bg-primary/90">
             Teka-teki Baru

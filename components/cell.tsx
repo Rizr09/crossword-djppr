@@ -54,35 +54,10 @@ export function Cell({ cell, row, col }: CellProps) {
       tabIndex={state.viewOnly ? -1 : 0}
     >
       {/* Clue number */}
-      {clueNumber && <span className="absolute text-xs font-medium text-muted-foreground top-0.5 left-0.5">{clueNumber}</span>}
+      {clueNumber && <span className="absolute text-xs font-medium text-gray-500 top-0.5 left-0.5">{clueNumber}</span>}
 
       {/* Cell value */}
       <span className="text-xl font-bold">{cell.value}</span>
-
-      {/* Hidden input for mobile keyboard - only show when not in view-only mode */}
-      {cell.isActive && !state.viewOnly && (
-        <input
-          type="text"
-          className="absolute inset-0 w-full h-full opacity-0"
-          maxLength={1}
-          autoFocus
-          value={cell.value}
-          onChange={(e) => {
-            const value = e.target.value.slice(-1)
-            if (/^[a-zA-Z]$/.test(value)) {
-              dispatch({
-                type: "SET_CELL_VALUE",
-                payload: { row, col, value },
-              })
-
-              // Move to the next cell after setting the value
-              setTimeout(() => {
-                dispatch({ type: "MOVE_ACTIVE_CELL", payload: { direction: "next" } })
-              }, 0)
-            }
-          }}
-        />
-      )}
     </div>
   )
 }

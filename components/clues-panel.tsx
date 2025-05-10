@@ -63,6 +63,9 @@ interface ClueItemProps {
 }
 
 function ClueItem({ clue, isActive, isComplete, isCorrect, onClick, viewOnly }: ClueItemProps) {
+  const { state } = useCrossword()
+  const number = state.grid[clue.startRow][clue.startCol].clueNumber
+
   return (
     <li
       className={`
@@ -75,7 +78,9 @@ function ClueItem({ clue, isActive, isComplete, isCorrect, onClick, viewOnly }: 
       onClick={onClick}
     >
       <div className="flex items-center justify-between">
-        <span className={`${isActive ? "font-semibold" : "font-medium"} text-foreground`}>{clue.text}</span>
+        <span className={`${isActive ? "font-semibold" : "font-medium"} text-foreground`}>
+          {number}. {clue.text}
+        </span>
         {isComplete && (
           <span className="ml-2">
             {isCorrect ? <Check className="w-4 h-4 text-green-500" /> : <X className="w-4 h-4 text-red-500" />}

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef } from "react"
+import { flushSync } from "react-dom"
 import { useCrossword } from "@/context/crossword-context"
 import { Cell } from "@/components/cell"
 
@@ -30,25 +31,14 @@ export function CrosswordGrid() {
         e.preventDefault()
         dispatch({ type: "MOVE_ACTIVE_CELL", payload: { direction: "right" } })
       }
-      // Handle letter input
-      else if (/^[a-zA-Z]$/.test(key)) {
-        dispatch({
-          type: "SET_CELL_VALUE",
-          payload: { row, col, value: key.toUpperCase() },
+      // Handle letter input: dispatch and advance cell
+      else if (/^[a-zA-Z]$/.test(key) && !e.isComposing) {
+        e.preventDefault()
+        // Flush update to state before moving to avoid skipped cells
+        flushSync(() => {
+          dispatch({ type: "SET_CELL_VALUE", payload: { row, col, value: key.toUpperCase() } })
         })
-
-        // Move to the next cell after setting the value
-        setTimeout(() => {
-          // Find the active clue to determine which direction to move
-          const activeClue = [...state.clues.across, ...state.clues.down].find((clue) => clue.id === state.activeClueId)
-
-          if (activeClue) {
-            dispatch({
-              type: "MOVE_ACTIVE_CELL",
-              payload: { direction: "next" },
-            })
-          }
-        }, 0)
+        dispatch({ type: "MOVE_ACTIVE_CELL", payload: { direction: "next" } })
       }
       // Handle backspace
       else if (key === "Backspace") {
